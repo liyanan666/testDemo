@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			window.onload=function(){
+				var oInput = document.getElementById('oInput');
+				var iTimer ;
+				oInput.onkeyup=function(){
+					clearTimeout(iTimer);
+					iTimer  = setTimeout(function(){
+						console.log(oInput.value)
+					},300)
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<input type="text" name="oInput" id="oInput" value="" />
+	</body>
+</html>
