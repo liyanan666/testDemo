@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			$("#oImg1").change(function(){  
+			 	var This = this;
+		   		uploadfile(This);
+		   	}); 
+		    function uploadfile(This){  //上传照片
+		    	var file = This.files[0];  
+		        //alert("文件大小:"+(file.size / 1024).toFixed(1)+"kB");  
+		        if (window.FileReader) {  
+		            var reader = new FileReader();  
+		            reader.readAsDataURL(file);  
+		            //监听文件读取结束后事件  
+		            reader.onloadend = function (e) {
+		            	This.parentNode.style.background="url("+e.target.result+") no-repeat";  //设置a标签
+		            	This.parentNode.style.backgroundSize="cover";
+		            	//console.log(e.target.result)
+		            };  
+		        }  
+		    }
+		</script>
+	</head>
+	<body>
+		<input type="file" name="oImg1" id="oImg1" value="" />
+	</body>
+</html>

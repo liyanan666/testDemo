@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<style type="text/css">
+			body,
+			ul,
+			h1,
+			p,
+			h3,
+			h4 {
+				margin: 0;
+				padding: 0;
+				font-size: 0.4rem;
+				font-family: "微软雅黑", "宋体";
+				font-weight: normal;
+			}
+			
+			li {
+				list-style: none;
+			}
+			
+			p {
+				margin-top: 0.1rem;
+				margin-bottom: 0.1rem;
+			}
+			
+			span {
+				display: inline-block;
+			}
+			
+			a {
+				text-decoration: none;
+				color: #fff;
+			}
+			
+			.clearfloat:after {
+				display: block;
+				clear: both;
+				content: "";
+				visibility: hidden;
+				height: 0
+			}
+			
+			.clearfloat {
+				zoom: 1
+			}
+			
+			#page {
+				width: 92%;
+				margin: 0 auto;
+				padding-top: 0.3rem;
+			}
+			
+			#tittle {
+				height: 0.5rem;
+			}
+			
+			#tittle span {
+				display: inline-block;
+				width: 4px;
+				height: 0.5rem;
+				background: #dec727;
+				margin-right: 0.3rem;
+			}
+			
+			#head {
+				padding-top: 0.3rem;
+			}
+			
+			#head .original {
+				background: #d2d2d2;
+				border-radius: 6px;
+				width: 1rem;
+				height: 0.5rem;
+				font-weight: normal;
+				text-align: center;
+				line-height: 0.5rem;
+				color: #FFFFFF;
+				font-size: 0.3rem;
+				margin-bottom: 0.3rem;
+			}
+			
+			#head .user {
+				height: 1rem;
+			}
+			
+			.picture {
+				width: 1rem;
+				height: 1rem;
+				border-radius: 50%;
+				float: left
+			}
+			
+			#head #username {
+				line-height: 1rem;
+				height: 1rem;
+				float: left;
+				margin-left: 20px;
+			}
+			
+			.user .focus {
+				width: 1.5rem;
+				height: 0.8rem;
+				float: right;
+				background: #d2d2d2;
+				color: #FFFFFF;
+				line-height: 0.8rem;
+				font-size: 0.4rem;
+				text-align: center;
+				border-radius: 10px;
+			}
+			
+			#content {
+				border-bottom: 1px solid #dadbdc;
+			}
+			
+			#content .text {
+				color: #959595;
+			}
+			
+			#content .textimg {
+				width: 100%;
+			}
+			
+			 
+			
+			#comment {
+				padding-top: 0.1rem;
+			}
+			
+			#comment .commentcontent {
+				margin-top: 10px;
+			}
+			
+			.commentcontent .picture {
+				margin-right: 15px;
+				margin-top: 0.15rem;
+			}
+			
+			.commentcontent .time,
+			.contenttext {
+				color: #a2a2a2;
+			}
+			
+			.commentcontent .reply {
+				margin-left: 1.2rem;
+				color: #A2A2A2;
+			}
+			
+			.commentcontent .reply strong {
+				color: #000;
+			}
+			
+			.commentcontent .conmenttext {
+				margin-left: 1rem;
+			}
+			.bottom{height: 1rem;line-height: 1rem;text-align: center;color: #959595;}
+			.replys{width: 100%;height: 1rem;position: fixed;bottom: 0;background: red;}
+			.replys input{float: left;width: 60%;height: .8rem;line-height: 2rem;display: inline-block;position: relative;}
+			.share {
+				position: absolute;
+				height: 1rem;
+				right: 30px;
+				line-height: 1rem;
+			}
+			
+			 .share li {
+				float: right;
+				margin-left:10px;
+				width: 0.9 rem;
+				height: 0.6rem;
+			}
+			
+			 .share li i {
+				width: 0.4rem;
+				height: 0.4rem;
+				display: inline-block;
+			}
+			
+			 .share li span {
+				color: #959595;
+				margin-left: 5px;
+			}
+			
+			 .shares {
+				background: url(img/share.png) no-repeat;
+				background-size: cover;
+			}
+			
+			 .favorite {
+				background: url(img/favorite1.png) no-repeat;
+				background-size: cover;
+			}
+			
+			 .zan {
+				background: url(img/zan1.png) no-repeat;
+				background-size: cover;
+			}
+		</style>
+		<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+		<script type="text/javascript">
+			(function($) {
+				$.getUrlParam = function(name) {
+					var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+					var r = window.location.search.substr(1).match(reg);
+					if(r != null) return unescape(r[2]);
+					return null;
+				}
+				$.extend({
+					myTime: {
+						/**
+						 * 当前时间戳
+						 * @return <int>        unix时间戳(秒)  
+						 */
+						CurTime: function() {
+							return Date.parse(new Date()) / 1000;
+						},
+						/**              
+						 * 日期 转换为 Unix时间戳
+						 * @param <string> 2014-01-01 20:20:20  日期格式              
+						 * @return <int>        unix时间戳(秒)              
+						 */
+						DateToUnix: function(string) {
+							var f = string.split(' ', 2);
+							var d = (f[0] ? f[0] : '').split('-', 3);
+							var t = (f[1] ? f[1] : '').split(':', 3);
+							return(new Date(
+								parseInt(d[0], 10) || null,
+								(parseInt(d[1], 10) || 1) - 1,
+								parseInt(d[2], 10) || null,
+								parseInt(t[0], 10) || null,
+								parseInt(t[1], 10) || null,
+								parseInt(t[2], 10) || null
+							)).getTime() / 1000;
+						},
+						/**              
+						 * 时间戳转换日期              
+						 * @param <int> unixTime    待时间戳(秒)              
+						 * @param <bool> isFull    返回完整时间(Y-m-d 或者 Y-m-d H:i:s)              
+						 * @param <int>  timeZone   时区              
+						 */
+						UnixToDate: function(unixTime, isFull, timeZone) {
+							if(typeof(timeZone) == 'number') {
+								unixTime = parseInt(unixTime) + parseInt(timeZone) * 60 * 60;
+							}
+							var time = new Date(unixTime);
+							var ymdhis = "";
+							ymdhis += time.getUTCFullYear() + "-";
+							ymdhis += (time.getUTCMonth() + 1) + "-";
+							ymdhis += time.getUTCDate();
+							if(isFull === true) {
+								ymdhis += " " + time.getUTCHours() + ":";
+								ymdhis += time.getUTCMinutes() + ":";
+								ymdhis += time.getUTCSeconds();
+							}
+							console.log()
+							return ymdhis;
+						}
+					}
+				});
+			})(jQuery);
+
+			$(function() {
+
+					$('#clicks').on('click',function(){
+						
+						$("#replycomment").focus();
+						$("#replycomment").attr('placeholder',)
+					})
+					//监听键盘事件
+					$(document).keydown(function (event) {
+		            	alert(event.keyCode);
+		            //判断当event.keyCode 为37时（即左方面键），执行函数to_left();
+		            //判断当event.keyCode 为39时（即右方面键），执行函数to_right();
+		            if (event.keyCode == 13) {
+		                alert('回车键');
+		            };
+		            
+        });
+
+			});
+		</script>
+	</head>
+
+	<body>
+		<div id="page">
+			<div id="tittle"><span></span>好多好多话想跟你说</div>
+			<div id="head">
+				<h1 class="original">原创</h1>
+				<div class="user">
+					<img class="picture" src="img/touxiang.jpg" />
+					<span id="username">用户名</span>
+					<span class="focus">已关注</span>
+				</div>
+			</div>
+			<div id="content">
+				<p class="text">dsadsadas</p>
+				<img class="textimg" src="img/touxiang.jpg" />
+			</div>
+			<div id="comment">
+				<div class="commentcontent" id="commentcontent1">
+					<div class="clearfloat">
+						<img class="picture" src="img/touxiang.jpg" />
+						<h4 id="usernames">用户名</h4>
+						<h3 class="time">时间</h3>
+						<div class="reply">
+							<p id="clicks">dsadadsa</p>
+							<p><strong>liyanan</strong>回复<strong>nia </strong><span>:dsada</span></p>
+						</div>
+					</div>
+				</div>
+				<div class="commentcontent" id="commentcontent2" id="pic">
+					<div class="clearfloat">
+						<img class="picture" src="img/touxiang.jpg" />
+						<h4 id="usernames">用户名</h4>
+						<h3 class="time">时间</h3>
+						<div class="reply">
+							<p>dsadadsa</p>
+							<p><strong>liyanan</strong>回复<strong>nia </strong><span>:dsada</span></p>
+						</div>
+					</div>
+				</div>
+				<div class="commentcontent" id="commentcontent3">
+					<div class="clearfloat">
+						<img class="picture" src="img/touxiang.jpg" />
+						<h4 id="usernames">用户名</h4>
+						<h3 class="time">时间</h3>
+						<div class="reply">
+							<p>dsadadsa</p>
+							<p><strong>liyanan</strong>回复<strong>nia </strong><span>:dsada</span></p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<p class="bottom">已经到底部了</p>
+			<div class="replys clearfloat">
+				<input type="text" id="replycomment" placeholder="请输入回复内容" />
+				<ul class="share clearfloat">
+					<li>
+						<a href="javascript:;"><i class="shares"></i><span> 1</span></a>
+					</li>
+					<li>
+						<a href="javascript:;"><i class="favorite"></i><span> 1</span></a>
+					</li>
+					<li>
+						<a href="javascript:;"><i class="zan"></i><span> 1</span></a>
+					</li>
+
+				</ul>
+			</div>
+		</div>
+		<script type="text/javascript">
+			document.getElementsByTagName("html")[0].style.fontSize = document.documentElement.clientWidth / 10 + "px";
+		</script>
+	</body>
+
+</html>

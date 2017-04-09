@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(document).keydown(function(event){
+						if(event.keyCode==13){
+							var keyValue = $("#replycomment").val();
+							
+							if(keyValue==''){
+								
+							}else if($("#check").val()=='q'){
+								$.ajax({
+									url: "http://192.168.1.199:8090/shopxx/mobile/member/article/addReply.jhtml",
+									type: "POST",
+									dataType: "json",
+									async:true,
+									data:{
+										token:token,
+										reviewId: reviewid,
+										replyId:replyid,
+										content:keyValue,
+										articleId: xx
+									},
+									success:function(json){
+										console.log(liindex);
+										$('#comment').find('li').eq(liindex).find('.reply').eq(0).append('<p reviewid="'+json.data.id+'" replyid="json.data" ><strong  id="replyname">'+json.data.member_nickname+'</strong>回复<strong>'+json.data.commentByUserNickname+'</strong>:'+json.data.content+'</p>');
+										$("#replycomment").val("");
+										$("#replycomment").attr('placeholder',"");
+									},
+									error:function(){
+										console.log('出错');
+									}
+								})
+							}else if($("#check").val()=='s'){
+								$.ajax({
+									url: "http://192.168.1.199:8090/shopxx/mobile/member/article/addReview.jhtml",
+									type: "POST",
+									dataType: "json",
+									async:false,
+									data:{
+										articleId: xx,
+										content:keyValue,
+										token:token
+										
+									},
+									success:function(json){
+										switchs=true;
+										//$("#replycomment").val("");
+										$("#comment").prepend($('<div class="commentcontent"><div class="clearfloat"><img class="picture" id="pic" src="'+json.data.member_headUrl+'" /><h4 id="usernames">'+json.data.member_nickname+'</h4><h3 class="time">'+$.myTime.UnixToDate(json.data.createDate)+'</h3></div><div class="reply" ><p id="replys">'+json.data.content+'</p></div></div>'));
+									},
+									error:function(){
+										console.log('');
+									}
+								});
+							}
+							
+						}
+					})
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

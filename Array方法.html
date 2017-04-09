@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			//使用传入的回调函数遍历数组，当所有回调都返回true时，every方法返回true，否则返回false。该方法会跳过保留缺失成员，不会破坏原数组。
+//			Array.prototype.newEvery = function(fn){
+//			    var status = true;
+//			    for(var i = 0; i < this.length; i++){
+//			        if(i in this){
+//			            if(!(status = !!fn(this[i], i, this))){
+//			                break;
+//			            }
+//			        }
+//			    }
+//			    return status;
+//			};
+//			var a = [1,2,3,4,5,2,undefined,0,3];
+//			console.log(a.newEvery(function(){
+//			    console.log(arguments);
+//			    return 1;
+//			}));
+
+//			Array.prototype.newSome = function(fn){
+//			    var status = false;
+//			    for(var i = 0; i < this.length; i++){
+//			        if(i in this){
+//			            if(status = !!fn(this[i], i, this)){
+//			                break;
+//			            }
+//			        }
+//			    }
+//			    return status;
+//			};
+//			var a = [1,2,3,4,5,2,undefined,,3];
+//			console.log(a.newSome(function(){
+//			    console.log(arguments);
+//			    return 0;
+//			}));
+
+
+//			Array.prototype.newMap = function(fn){
+//			    var array = new Array(this.length);
+//			    for(var i = 0; i < this.length; i++){
+//			        if(i in this){
+//			            array[i] = fn(this[i], i, this);
+//			        }
+//			    }
+//			    return array;
+//			};
+//			var a = [1,2,3,4,5,2,undefined,,3];
+//			console.log(a.newMap(function(element, index, array){
+//			    console.log(arguments);
+//			    return element;
+//			}));
+
+			Array.prototype.newReduce = function(fn){
+			    if(this.length === 0){
+			        throw new TypeError('Reduce of empty array with no initial value');
+			    }
+			    var result;
+			    for(var i = 0; i < this.length; i++){
+			        if(i in this){
+			            if(!result){
+			                result = this[i];
+			            }else{
+			                result = fn(result, this[i], i, this);
+			            }
+			        }
+			    }
+			    return result;
+			};
+			var a = [,,1,2,3,4,,6,7];
+			console.log(a.newReduce(function(a,b){
+			    console.log(arguments);
+			    return a + b;
+			}));
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

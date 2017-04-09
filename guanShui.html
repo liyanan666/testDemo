@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			h1 {
+				font-size: 20px;
+				margin: 5px;
+			}
+			li{list-style: none;}
+			input,
+			textarea {
+				height: 30px;
+				border: 1px solid #e7e7e7;
+				margin-top: 10px;
+				box-shadow: 1px -1px 5px #e7e7e7;
+			}
+			
+			.title {
+				height: 25px;
+				border-bottom: 1px solid #e7e7e7;
+				width: 1200px;
+				margin: 40px auto 20px auto;
+			}
+			
+			.meau {
+				width: 400px;
+				margin-left: 90px;
+				position: relative;
+			}
+			
+			.meau input {
+				width: 500px;
+			}
+			.meau .meaulist{
+				position: absolute;
+				top: 70px;
+				width: 100px;
+				display: none;
+			}
+			.meaulist li{
+				height: 30px;
+				border: 1px solid #e7e7e7;
+				background: #fff;
+				line-height: 30px;
+				text-align: center;
+			}
+			.content {
+				width: 500px;
+				margin-left: 90px;
+				margin-top: 20px;
+				box-shadow: 1px -1px 5px #e7e7e7;
+				border: 1px solid #e7e7e7;
+				padding: 20px 0;
+			}
+			
+			.content input,
+			.content h1,
+			.content textarea {
+				width: 400px;
+				margin: 5px auto;
+			}
+			
+			.content input {
+				display: block;
+				margin-top: 10px;
+			}
+			
+			.content textarea {
+				display: block;
+				height: 100px;
+			}
+			
+			.content .reply {
+				margin: 10px auto 0 auto;
+				width: 80%;
+				font-size: 20px;
+			}
+			
+			.content .add , .sub{
+				width: 60px;
+				background: #438ac8;
+				color: #fff;
+				line-height: 30px;
+				text-align: center;
+				margin-left: 50px;
+				border-radius: 5px;
+			}
+			.sub{margin-left: 90px;}
+		</style>
+		<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				var $meauID = $("#meauID");
+				var $meaulist = $(".meaulist");
+				$meauID.on('keyup',function(){
+					$meaulist.show();
+					if($meauID.val()==''){
+						$meaulist.hide();
+					}
+					setTimeout(function(){
+						$.ajax({
+						type:"get",
+						url:"",
+						data:$meauID.val(),
+						async:true,
+						success:function(data){
+							$meaulist.html('');
+							var str = '';
+							for (var i=0;i<data.length;i++) {
+								str+='<li>'+data[i]+'</li>';
+							}
+							$meaulist.html(str);
+							}
+						});
+					},500)
+				})
+			})
+		</script>
+	</head>
+
+	<body>
+		<form action="" method="post">
+			<h1 class="title">灌水任务</h1>
+			<div class="meau" >
+				<h1>菜谱ID</h1>
+				<input type="text" name="" id="meauID" value="" />
+				<ul class="meaulist">
+					
+				</ul>
+			</div>
+			<div class="content">
+				<h1>评论时间</h1> 
+				<input type="datetime-local" name="" id="" value="" />
+				<h2 class="reply">评论内容</h1>
+			<textarea name="" rows="" cols=""></textarea>
+			<input type="button" name="" id="" value="添加"  class="add"/>
+		</div>
+			<input type="submit" value="保存" class="sub"/>
+		</form>
+		
+		
+	</body>
+</html>

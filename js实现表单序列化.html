@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>表单序列化</title>
+	</head>
+
+	<body>
+		<fieldset>
+			<legend>表单</legend>
+			<form>
+				<div>
+					MM:<input type="radio" name="name" value="mm"></br>
+					GG:<input type="radio" name="name" value="gg"></br>
+				</div>
+				<div>
+					ping<input type="checkbox" name="ping" value="ping"> pang
+					<input type="checkbox" name="pang" value="pang"> qi
+					<input type="checkbox" name="qiu" value="qiu"></br>
+				</div>
+				<div>
+					<textarea rows="8" cols="15"></textarea></br>
+				</div>
+				<div>
+					<select name="fruits">
+						<option value="apple">apple</option>
+						<option value="orange">orange</option>
+						<option value="peach">peach</option>
+					</select>
+				</div>
+				<input type="button" id="btn" value="点击" />
+			</form>
+		</fieldset>
+
+		<script type="text/javascript">
+			var form = document.forms[0];
+			var btn = document.getElementById('btn');
+			btn.onclick = function() {
+				serialize(form);
+			}
+
+			function serialize(form) {
+				var len = form.elements.length; //表单字段长度;表单字段包括<input><select><button>等
+				var field = null; //用来存储每一条表单字段
+				var parts = []; //保存字符串将要创建的各个部分
+				var opLen, //select中option的个数
+					opValue; //select中option的值
+				//遍历每一个表单字段
+				for(var i = 0; i < len; i++) {
+					field = form.elements[i];
+					/*检测每一个表单字段的类型，做出不同的处理：
+					 *1.最麻烦的就是select：它可能是单选框也可能是多选框，这里的代码适合于这两种框。在找到一个选中的项之后，需要确
+					 *定使用什么值。如果不存在value特性或者虽然存在但是值为空字符串，都要使用选项的文本来代替。为查这个属性，在DOM兼
+					 *容的浏览器中使用hasAttribute()方法，在IE中需要使用特性的specified属性。
+					 *2.表单中如果包括<fieldset>
+					 *元素，则该元素会出现在表单集合中但是没有type属性。因此，如果type属性未定义，则不必对其进行序列化；同样，对于
+					 *各种按钮以及文件输入字段都是如此。
+					 *3.对于单选按钮和复选框，要检查其checked属性是否被设置为false,如果是则退出switch语句，如果checked属性为true
+					 *则继续进行default内容，即将当前的名称和值进行编码，然后添加到parts数组中。函数的最后一步就是使用join格式化整
+					 *个字符串，也就是用和好来分隔每一个表单字段
+					 */
+					switch(field.type) {
+						case "select-one":
+						case "select-multiple":
+							if(field.name.length) {
+								for(var j = 0, opLen = field.options.length; j < opLen; j++) {
+									option = field.options[j];
+									if(option.selected) {
+										opValue = '';
+										if(option.hasAttribute) {
+											opValue = (option.hasAttribute('value') ? option.value : option.text);
+										} else {
+											opValue = (option.hasAttribute['value'].specified ? option.value : option.text); //IE下
+										}
+										parts.push(encodeURIComponent(field.name) + '=' + encodeURIComponent(opValue));
+									}
+
+								}
+							}
+							break;
+						case undefined:
+						case "file":
+						case "submit":
+						case "reset":
+						case "button":
+							break;
+						case "radio":
+						case "checkbox":
+							if(!field.checked) {
+								break;
+							}
+						default:
+							if(field.name.length) {
+								parts.push(encodeURIComponent(field.name) + '=' + encodeURIComponent(opValue));
+
+							}
+							break;
+					}
+				}
+				console.log(parts)
+				return parts.join("&");
+			}
+		</script>
+	</body>
+
+</html>

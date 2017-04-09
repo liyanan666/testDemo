@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.wrapper {
+				width: 100%;
+				height: 100%;
+				position: relative;
+				overflow: hidden;
+			}
+			
+			.process-box {
+				width: 17.25rem;
+				height: 2.5rem;
+				line-height: 2.5rem;
+				background-color: #FFF;
+				margin: 1.5rem auto;
+				border-radius: 0.2rem;
+			}
+			
+			.page-icon {
+				float: left;
+				font-size: 0.4rem;
+				color: #FFE7C9;
+				width: 1.32rem;
+				text-align: center;
+			}
+			
+			.page-info {
+				font-size: 0.65rem;
+				color: #F3A84D;
+			}
+			
+			.question-box {
+				width: 17.25rem;
+				background-color: #FFF;
+				margin-left: 0.75rem;
+				border-radius: 0.2rem;
+			}
+			
+			.question {
+				font-size: 0.8rem;
+				color: #43689F;
+				padding: 1.1rem 0 0.8rem 0.75rem;
+			}
+			
+			.answer-item {
+				font-size: 0.75rem;
+				color: #80A1D0;
+				border-top: 1px solid #EEE;
+				padding: 1.1rem 0 1.1rem 1.0rem;
+			}
+			
+			.icon-txt {
+				background-color: orange;
+				border-radius: 0.5rem;
+				display: block;
+				width: 0.8rem;
+				height: 0.8rem;
+				line-height: 0.8rem;
+				margin: 0.95rem auto;
+			}
+			
+			.icon-txt-active {
+				background-color: #FFE7C9;
+				border-radius: 0.3rem;
+				display: block;
+				width: 0.3rem;
+				height: 0.3rem;
+				line-height: 2.0rem;
+				color: #FFF;
+				margin: 1.25rem auto;
+			}
+			
+			.list-item {
+				width: 100%;
+				position: absolute;
+				transform: translate3d(100%, 0, 0);
+				transition: transform 0.5s;
+			}
+			
+			.first-li {
+				transform: translate3d(0, 0, 0);
+			}
+			
+			.selected {
+				background-color: orange;
+			}
+		</style>
+		<script src="js/angular.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			(function(agr) {
+				//模块 - app
+				var app = agr.module('app', []);
+
+				//控制器 - 风险测评
+				app.controller('RiskTestController', ['$scope', '$http', RiskTestController]);
+
+				function RiskTestController($scope, $http) {
+					var vm = this;
+
+					vm.letter = ['A', 'B', 'C', 'D', 'E']; //答案编号
+					vm.questionList = []; //题目
+					vm.point = 0; //得分
+					vm.showResult = false; //是否显示结果页
+
+					//加载数据       
+					$http({
+						method: 'GET',
+						url: '/data/angular.json',
+					}).then(function(resp) {
+						vm.questionList = resp.data.Questions;
+					}, function(resp) {
+						console.log("ERROR", resp);
+					});
+
+					var lis = document.querySelectorAll(".list-item"), //题目列表
+						count = 0, //做了多少道题
+						index = 0, //当前第几题
+						BIG = 9; //最大索引值，因为总共10道题，所以是9（常量）
+
+					//选择答案
+					vm.OnClickAnswer = function(answer, $parentIndex) {
+
+						var icons = document.querySelectorAll(".icon"),
+							curr = $parentIndex; //当前题目索引
+						next = $parentIndex + 1; //下一题索引
+						nextQuestion = vm.questionList[next]; //下一道题
+
+						//当前问题的答案列表
+						var answerList = vm.questionList[$parentIndex].AnswerList;
+
+						//为每个答案对象添加属性 Selected, 默认值为false
+						for(var i = 0, len = answerList.length; i < len; i++) {
+							answerList[i].Selected = false;
+						}
+
+						//将选中的答案设置为true (从而应用样式.selected 将背景色设置为黄色)
+						answer.Selected = true;
+
+						//判断是否为最后一道题
+						if($parentIndex < BIG) { //不是最后一题
+
+							//改变顶部进度样式
+							icons[curr].classList.remove("icon-txt");
+							icons[curr].classList.add("icon-txt-active");
+
+							//切换到下一题
+							lis[curr].style.webkitTransform = 'Translate3d(-100%,0,0)';
+							nextQuestion && (lis[next].style.webkitTransform = 'Translate3d(0,0,0)');
+
+						} else { //是最后一题
+
+							//改变顶部进度样式
+							icons[curr].classList.remove("icon-txt");
+							icons[curr].classList.add("icon-txt-active");
+
+							//计算分数
+							vm.point = CalcPoint();
+
+							//显示测评结果
+							vm.showResult = true;
+						}
+
+						//做了多少题
+						count = CalcCount();
+
+						//因为选中答案会自动切换到下一题，所以索引更新为next
+						index = next;
+					}
+
+					//计算分数
+					var CalcPoint = function() {
+						var point = 0;
+						for(var i = 0, lenq = vm.questionList.length; i < lenq; i++) {
+							for(var k = 0, lena = vm.questionList[i].AnswerList.length; k < lena; k++) {
+								if(vm.questionList[i].AnswerList[k].Selected) {
+									point += vm.questionList[i].AnswerList[k].Score;
+								}
+							}
+						}
+						return point;
+					}
+
+					//计算当前做了多少道题
+					var CalcCount = function() {
+						var count = 0;
+						for(var i = 0, lenq = vm.questionList.length; i < lenq; i++) {
+							for(var k = 0, lena = vm.questionList[i].AnswerList.length; k < lena; k++) {
+								if(vm.questionList[i].AnswerList[k].Selected) {
+									count++;
+								}
+							}
+						}
+						return count;
+					}
+
+					/** 触屏滑动效果处理 == 开始 == **/
+
+					var offsetX = 0, //手指滑动偏移量
+						startX, //滑动开始时的X轴坐标点
+						startTime; //手指滑动开始时间
+
+					//触屏开始
+					var startHandler = function(evt) {
+
+						//每次触屏时将偏移量重置为0
+						offsetX = 0;
+
+						//记录X坐标
+						startX = evt.touches[0].pageX;
+
+						//取得时间戳
+						startTime = new Date() * 1;
+					};
+
+					//触屏滑动
+					var moveHandler = function(evt) {
+						//阻止默认事件
+						evt.preventDefault();
+
+						//记录手指滑动的偏移量
+						offsetX = evt.touches[0].pageX - startX;
+
+						var curr = index,
+							prev = index - 1,
+							next = index + 1,
+							prevQuestion = vm.questionList[prev],
+							nextQuestion = vm.questionList[next],
+							width = window.innerWidth;
+
+						//手指滑动时题卡跟着手指滑动（向右滑：[偏移量大于0，即正数，并且不是第一道题]）
+						if(offsetX > 0 && index > 0) {
+							lis[curr].style.webkitTransform = 'Translate3d(' + offsetX + 'px, 0, 0)';
+							prevQuestion && (lis[prev].style.webkitTransform = 'Translate3d(' + (offsetX - width) + 'px, 0, 0)');
+						}
+
+						//手指滑动时题卡跟着手指滑动（向左滑：[偏移量小于0，即负数，并且不是最后一题]）
+						if(offsetX < 0 && index < count) {
+							lis[curr].style.webkitTransform = 'Translate3d(' + offsetX + 'px, 0, 0)';
+							nextQuestion && (lis[next].style.webkitTransform = 'Translate3d(' + (offsetX + width) + 'px, 0, 0)');
+						}
+
+					};
+
+					//触屏结束
+					var endHandler = function(evt) {
+						var boundary = window.innerWidth / 5, //当手指滑动的偏移量为屏幕的5分之一时才进行切换
+							quickBoundary = 60, //当手指快速滑动时，偏移量为60即可 
+							endTime = new Date() * 1; //获取结束时间戳
+
+						//判断是否为快速滑动
+						if(endTime - startTime > 1000) {
+
+							//判断是向左滑还是向右滑
+							if(offsetX > 0) {
+
+								//判断是否达到切换偏移量
+								if(offsetX >= boundary) {
+									MoveToRight();
+								} else {
+									ResetMoveRight();
+								}
+							} else {
+								if(offsetX < -boundary) {
+									MoveToLeft();
+								} else {
+									ResetMoveLeft();
+								}
+							}
+						} else {
+							if(offsetX > 0) {
+								if(offsetX >= quickBoundary) {
+									MoveToRight();
+								} else {
+									ResetMoveRight();
+								}
+							} else {
+								if(offsetX < -quickBoundary) {
+									MoveToLeft();
+								} else {
+									ResetMoveLeft();
+								}
+							}
+						}
+					};
+
+					//向右滑动事件
+					var MoveToRight = function() {
+						var curr = index,
+							prev = index - 1,
+							prevQuestion = vm.questionList[prev];
+
+						if(curr > 0) {
+							lis[curr].style.webkitTransform = 'Translate3d(100%, 0, 0)';
+							prevQuestion && (lis[prev].style.webkitTransform = 'Translate3d(0, 0, 0)');
+
+							index--;
+						}
+					}
+
+					//右滑重置(当滑动距离没达到切换偏移量时，题卡回到原点)
+					var ResetMoveRight = function() {
+						var curr = index,
+							prev = index - 1,
+							prevQuestion = vm.questionList[prev];
+
+						lis[curr].style.webkitTransform = 'Translate3d(0, 0, 0)';
+						prevQuestion && (lis[prev].style.webkitTransform = 'Translate3d(-100%, 0, 0)');
+					}
+
+					//向左滑动事件
+					var MoveToLeft = function() {
+						var curr = index,
+							next = index + 1,
+							nextQuestion = vm.questionList[next];
+
+						if(curr < count) {
+							lis[curr].style.webkitTransform = 'Translate3d(-100%, 0, 0)';
+							nextQuestion && (lis[next].style.webkitTransform = 'Translate3d(0, 0, 0)');
+
+							index++;
+						}
+					}
+
+					//左滑重置(当滑动距离没达到切换偏移量时，题卡回到原点)
+					var ResetMoveLeft = function() {
+						var curr = index,
+							next = index + 1,
+							nextQuestion = vm.questionList[next];
+
+						lis[curr].style.webkitTransform = 'Translate3d(0, 0, 0)';
+						nextQuestion && (lis[next].style.webkitTransform = 'Translate3d(100%, 0, 0)');
+					}
+
+					//监听滑动事件     
+					var outer = document.getElementById("listBox");
+					outer.addEventListener('touchstart', startHandler);
+					outer.addEventListener('touchmove', moveHandler);
+					outer.addEventListener('touchend', endHandler);
+
+					/** 触屏滑动效果处理 == 结束 == **/
+				}
+			})(angular);
+		</script>
+	</head>
+		<div class="wrapper" ng-controller="RiskTestController as vm">
+			<div class="process-box">
+				<ul>
+					<li class="page-icon"><span class="icon icon-txt">1</span></li>
+					<li class="page-icon"><span class="icon icon-txt">2</span></li>
+					<li class="page-icon"><span class="icon icon-txt">3</span></li>
+					<li class="page-icon"><span class="icon icon-txt">4</span></li>
+					<li class="page-icon"><span class="icon icon-txt">5</span></li>
+					<li class="page-icon"><span class="icon icon-txt">6</span></li>
+					<li class="page-icon"><span class="icon icon-txt">7</span></li>
+					<li class="page-icon"><span class="icon icon-txt">8</span></li>
+					<li class="page-icon"><span class="icon icon-txt">9</span></li>
+					<li class="page-icon"><span class="icon icon-txt">10</span></li>
+				</ul>
+				<div class="page-info">
+					已完成 {{vm.count}}/10
+				</div>
+			</div>
+			<ul class="list-box" id="listBox">
+				<li class="list-item" ng-repeat="question in vm.questionList track by $index" ng-class="{'first-li': $index == 0}">
+					<div class="question-box">
+						<div class="question">{{$index + 1}}. {{question.Question}}</div>
+						<ul class="answer">
+							<li class="answer-item" ng-repeat="answer in question.AnswerList track by $index" ng-click="vm.OnClickAnswer(answer, $parent.$index)" ng-class="{'selected': answer.Selected}">
+								{{vm.letter[$index]}}. {{answer.Text}}
+							</li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+			<div ng-show="vm.showResult">
+				<span>{{vm.point}}</span>
+			</div>
+		</div>
+
+	<body>
+	</body>
+
+</html>

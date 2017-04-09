@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			//获取app数据
+			var s = JSdInterface.getToken();
+			alert(s);
+			
+				var test = document.getElementById("test");
+				test.onclick=function(){
+					var d = 'tokenid';
+					JSdInterface.getId(d);
+				 	//alert(1)
+				 }
+				
+				//向app传数据
+				 function showFromHtml(){  
+				       document.getElementById("id_input").value = "Java call Html";  
+				 }  
+			
+			var d = 'tokenid';
+			JSdInterface.getId(d);
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

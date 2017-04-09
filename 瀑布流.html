@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			div {
+				width: 960px;
+				margin: 0 auto;
+				border: 1px solid black;
+				background: gainsboro;
+			}
+			
+			div ul {
+				width: 200px;
+				float: left;
+			}
+			
+			div ul li {
+				width: 200px;
+				background: darkturquoise;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload = function() {
+				var oDiv = document.getElementsByTagName('div')[0];
+				var oUl = document.getElementsByTagName('ul');
+
+				function random(min, max) {
+					return Math.random() * (max - min + 1) + min;
+				}
+
+				function creatLi(num) {
+					for(var i = 0; i < num; i++) {
+						var oLi = document.createElement('li');
+						var heigth = parseInt(random(100, 400));
+						var arr = [];
+						oLi.style.height = heigth + 'px';
+						for(var i = 0; i < oUl.length; i++) {
+							arr.push(oUl.offsetHeight);
+						}
+						var minHeigth = arr[0];
+						var minindex = 0;
+						for(var j = 0; j < arr.length; j++) {
+							if(minHeigth > arr[j]) {
+								minHeigth = arr[j];
+								minindex = j;
+							}
+						}
+						oUl[minindex].appendChild(oLi);
+					}
+				}
+				
+				creatLi(20)
+			}
+		</script>
+	</head>
+
+	<body>
+		<div>
+			<ul></ul>
+			<ul></ul>
+			<ul></ul>
+			<ul></ul>
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,80 @@
+<script type="text/javascript">
+$().ready(function() {
+
+	var $loginForm = $("#loginForm");
+	var $username = $("#username");
+	var $password = $("#password");
+	var $captcha = $("#captcha");
+	var $captchaImage = $("#captchaImage");
+	var $isRememberUsername = $("#isRememberUsername");
+	var $submit = $("input:submit");
+	
+	// 记住用户名
+	if (getCookie("memberUsername") != null) {
+		$isRememberUsername.prop("checked", true);
+		$username.val(getCookie("memberUsername"));
+		$password.focus();
+	} else {
+		$isRememberUsername.prop("checked", false);
+		$username.focus();
+	}
+	
+	// 更换验证码
+	$captchaImage.click(function() {
+		$captchaImage.attr("src", "/common/captcha.jhtml?captchaId=e1d5c55a-e3ce-40ed-a1c9-cd34b083ab4f&timestamp=" + new Date().getTime());
+	});
+	
+	// 表单验证、记住用户名
+	$loginForm.validate({
+		rules: {
+			username: "required",
+			password: "required"
+				,captcha: "required"
+		},
+		submitHandler: function(form) {
+			$.ajax({
+				url: "/common/public_key.jhtml",
+				type: "GET",
+				dataType: "json",
+				cache: false,
+				beforeSend: function() {
+					$submit.prop("disabled", true);
+				},
+				success: function(data) {
+					var rsaKey = new RSAKey();
+					rsaKey.setPublic(b64tohex(data.modulus), b64tohex(data.exponent));
+					var enPassword = hex2b64(rsaKey.encrypt($password.val()));
+					$.ajax({
+						url: $loginForm.attr("action"),
+						type: "POST",
+						data: {
+							username: $username.val(),
+							enPassword: enPassword
+								,captchaId: "e1d5c55a-e3ce-40ed-a1c9-cd34b083ab4f",
+								captcha: $captcha.val()
+						},
+						dataType: "json",
+						cache: false,
+						success: function(message) {
+							if ($isRememberUsername.prop("checked")) {
+								addCookie("memberUsername", $username.val(), {expires: 7 * 24 * 60 * 60});
+							} else {
+								removeCookie("memberUsername");
+							}
+							$submit.prop("disabled", false);
+							if (message.type == "success") {
+										location.href = "\/mobile/member/index.jhtml";
+							} else {
+								$.message(message);
+									$captcha.val("");
+									$captchaImage.attr("src", "/common/captcha.jhtml?captchaId=e1d5c55a-e3ce-40ed-a1c9-cd34b083ab4f&timestamp=" + new Date().getTime());
+							}
+						}
+					});
+				}
+			});
+		}
+	});
+
+});
+</script>
