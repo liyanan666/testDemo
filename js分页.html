@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			a{
+				margin: 10px;
+			}
+			#odiv,#page{
+				display: inline-block;
+			}
+			#page input{
+				width: 30px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="odiv">
+			
+		</div>
+		<div id="page">
+			<span>共<strong>1</strong>条</span>
+			<span>总数<strong>1</strong>条</span>
+			<span>跳转到<input type="text" />页</span>
+			<strong id="go">GO</strong>
+		</div>
+		<script type="text/javascript">
+			page('odiv',2,20)
+			function page(obj,nowpage,allpage){
+				var odiv = document.getElementById(obj);
+				odiv.innerHTML='';
+				if(nowpage!=1){
+					var oA = document.createElement('a');
+					var oB = document.createElement('a');
+					oA.href='#'+1;
+					oA.innerHTML= '首页';
+					odiv.append(oA);
+					oB.href='#'+(nowpage-1);
+					oB.innerHTML= '上一页';
+					odiv.append(oB);
+				}
+				if(allpage<=5){
+					for (var i=1;i<=allpage;i++) {
+						
+						oA.href='#'+i;
+						if(nowpage == i){
+							oA.innerHTML= i;
+						}else{
+							oA.innerHTML='['+i+']';
+						}
+						odiv.append(oA);
+					}
+				}else{
+					
+					for(var i=1;i<=5;i++){
+						if(nowpage==1||nowpage==2){
+							var oA = document.createElement('a');
+							oA.href='#'+i;
+							if(nowpage==i){
+								oA.innerHTML= i;
+							}else{
+								oA.innerHTML='['+i+']';
+							}
+							odiv.append(oA);
+						}else if(allpage-nowpage==0||allpage-nowpage==1){
+							var oA = document.createElement('a');
+							
+							if((allpage-nowpage)==0 && i==5){
+								oA.href='#'+(allpage-5+i);
+								oA.innerHTML= allpage-5+i;
+								odiv.append(oA);
+							}else if((allpage-nowpage)==1 && i==4){
+								oA.href='#'+(allpage-5+i);
+								oA.innerHTML= allpage-5+i;
+								odiv.append(oA);
+							}else{
+								oA.href='#'+(allpage-5+i);
+								oA.innerHTML='['+(allpage-5+i)+']' ;
+								odiv.append(oA);
+							}
+							//console.log(str1)
+						}else{
+							var oA = document.createElement('a');
+							oA.href='#'+(nowpage-3+i);
+							if(i==3){
+								
+								oA.innerHTML= nowpage-3+i;
+								odiv.append(oA);
+							}else{
+								
+								oA.innerHTML= '['+(nowpage-3+i)+']';
+								odiv.append(oA);
+							}
+						}
+						
+					}
+				}
+				if(allpage-nowpage>2){
+					var oA = document.createElement('a');
+					var oB = document.createElement('a');
+					oA.href='#'+(nowpage+1);
+					oA.innerHTML= '下一页';
+					odiv.append(oA);
+					oB.href='#'+(allpage);
+					oB.innerHTML= '尾页';
+					odiv.append(oB);
+				}
+				var pagenum = odiv.getElementsByTagName('a');
+				for (var i=0;i<pagenum.length;i++) {
+					pagenum[i].onclick=function(){
+						var nowpage = parseInt(this.getAttribute('href').substring(1));
+					
+						page('odiv',nowpage,20);
+					}
+				}
+			}
+		</script>
+	</body>
+</html>
