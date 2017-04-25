@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+			<script type="text/javascript">
+				var unload = false;
+				window.onbeforeunload=function(){
+					unload = true;
+				}
+				window.onunload=function(e){
+				    if(unload){
+				    	console.log("刷新")
+				    }else{
+				    	confirm("关闭")
+				    }
+				}
+			
+		</script>
+	</head>
+
+	<body>
+	
+	</body>
+
+</html>

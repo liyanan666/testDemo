@@ -1,0 +1,48 @@
+<html>
+	
+	<head>
+		<title>自动创建表格</title>
+		<meta charset="UTF-8"/>
+		<style type="text/css">
+			table {
+				width: 300px;
+				height: 100px;
+				border: #0C9 1px solid;
+				border-collapse: collapse;
+			}
+		</style>
+		<script type="text/javascript" language="javascript">
+			function autocreate(){
+    			//创建table表格
+			    var table=document.createElement("table");
+			    table.setAttribute("border","1");
+			    table.setAttribute("background","red");
+			    //获取行数值
+			    var line=document.getElementById("line").value;
+			    //获取列数值
+			    var list=document.getElementById("list").value;
+			    for(var i=1;i<=line;i++){
+			        //alert(line);
+			        //创建tr
+			        var tr=document.createElement("tr");
+			        for(var j=1;j<=list;j++){
+			            
+			            var td=document.createElement("td");
+			            td.innerHTML=i*j;
+			            tr.appendChild(td);
+			        }
+			           table.appendChild(tr); 
+			    }
+				document.getElementById("d1").appendChild(table);
+			}
+		</script>
+	</head>
+
+	<body>
+		<input type="text" id="line">行数
+		<input type="text" id="list">列数
+		<input type="button" value="添加表格" onclick="autocreate()">
+		<div id="d1" style="height:400px; width:300px;"></div>
+	</body>
+
+</html>

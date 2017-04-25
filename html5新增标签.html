@@ -1,0 +1,58 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Html5学习之路</title>
+</head>
+<body>
+<header style="text-align: center; color: blue;">欢迎来到Html5的学习之路，我是header标签。</header>
+这是一个定义选项列表的标签datalist 这个的作用就是将text文本框与select标签结合起来
+ 
+<input type="text" list="phone">
+<datalist id="phone">
+    <option></option>
+    <option>IPhone</option>
+    <option>华为    </option>
+    <option>小米    </option>
+    <option>三星</option>
+</datalist>
+<br/>
+<br/>
+<font color="red">这里我发现了两者一个不同之处在于，datalist只有在输入框为空的时候才会有自己定义下拉的内容!</font>
+<br/>
+而这个select选项框是不管什么内容它都会存在的
+<select>
+    <option>IPhone</option>
+    <option>华为    </option>
+    <option>小米    </option>
+    <option>三星</option>
+</select>
+<br>
+<br>
+<br>
+ 
+------------------------
+<br><br><br>
+这是一个定义文档细节的标签。detail标签。它的主要作用很简单。
+<details>
+    <summary>这是一个detail标签，下面就是他的使用方法</summary>
+        <p>detail标签是什么？</p>
+        <p>detail标签有什么作用？</p>
+        <p>detail标签能干什么？</p>
+        <p>detail标签我改怎么用它？</p>
+</details>
+<br>
+detail标签常与sunmmary标签用在一起。比如这个标签是高亮标签<mark>mark</mark>比重不一样。
+<br><br>
+接下来这个标签是定义列表标签。menu。
+<menu>
+    <li>西游记</li><li>水浒传</li><li>红楼梦</li><li>三国演义</li>
+</menu>
+<br><br>
+进度条标签我们用的比较多。比如这个。<mark>progress</mark>
+<progress value="5" max="10">value=5 max=10</progress>
+<br>
+<audio src="" controls="controls" autoplay="autoplay" loop="loop"></audio>
+<footer>我是底部footer标签</footer>
+</body>
+</html>

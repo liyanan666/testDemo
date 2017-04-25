@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>省市区+百度API查询地址</title>
+</head>
+<style>
+    .ipt {
+        border: 1px solid #ddd;
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.17) inset;
+        transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+        border-radius: 0 !important;
+        -moz-border-radius: 0 !important;
+        -webkit-border-radius: 0 !important;
+        height: 34px;
+        padding: 0px 5px;
+        line-height: 30px\9;
+    }
+    * {
+        box-sizing: border-box;
+    }
+    .map {
+        width: 500px;
+        height: 300px;
+        border: 1px solid #999;
+        margin-left: 100px;
+        margin-top: 10px;
+    }
+    /*备注：去掉百度copyright*/
+    #map_container.map .BMap_cpyCtrl.BMap_noprint.anchorBL{
+        display: none;
+    }
+</style>
+<body>
+
+<select id="province" name="province" class="ipt areaLists" style="width:150px;"></select>
+<select id="city" name="city" class="ipt areaLists" style="width:150px;"></select>
+<select id="county" name="county" class="ipt areaLists" style="width:150px;"></select>
+<input class="ipt" id="address" placeholder="例如：科韵路信息港A座" style="width: 460px;">
+
+<div id="map_container" class="map" ></div>
+<!--<input id="result_">-->
+<script src="//cdn.bootcss.com/jquery/2.2.3/jquery.js"></script>
+<script src="js/area.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
+<script>
+    //创建Map实例
+    var map = new BMap.Map("map_container");
+    //初始化广州坐标
+    var point = new BMap.Point(113.270793, 23.135308);
+    //地图平移缩放控件：默认左上方
+    map.addControl(new BMap.NavigationControl());
+    //比例尺控件，默认位于地图左下方，显示地图的比例关系
+    map.addControl(new BMap.ScaleControl());
+    map.centerAndZoom(point,11);
+    //添加鼠标滚动缩放
+    map.enableScrollWheelZoom(true);
+    //设置标注的图标
+    //var icon = new BMap.Icon("img/icon.jpg",new BMap.Size(100,100));
+    //设置标注的经纬度
+    var marker = new BMap.Marker(point);
+    //把标注添加到地图上
+    map.addOverlay(marker);
+
+    //地址解析类
+    var gc = new BMap.Geocoder();
+    //显示地址信息窗口
+    function showLocationInfo(pt, rs){
+        var addComp = rs.addressComponents;
+        $("#longitude").val(pt.lng);
+        $("#latitude").val(pt.lat);
+        console.log('经纬度：'+pt.lng+' '+pt.lat);
+    }
+
+    //删除标注
+    function deletePoint(){
+        var allOverlay = map.getOverlays();
+        for (var i = 0; i < allOverlay.length; i++){
+            map.removeOverlay(allOverlay[i]);
+        }
+    }
+
+    //根据选择框或输入框获取地址
+    var _area={
+        //keyword:'',
+        _areaLists:$(".areaLists"),
+        _address:$("#address"),
+        unChecked:function(val){
+            return (val==''||typeof (val)=='undefined'||val==null||
+            val=='省份'||val=='地级市'||val=='市、县级市')?false:true;
+        },
+        list:function(){
+            //console.log(_areaLists.length);
+            var _joinArea='';
+            for(var i=0;i<this._areaLists.length;i++){
+                if(_area.unChecked(this._areaLists[i].value)){
+                    _joinArea+=this._areaLists[i].value;
+                }
+            }
+            if(_area.unChecked(this._address.val())){
+                 _joinArea+=' '+this._address.val();
+                //_joinArea=this._address.val();
+                console.log('here');
+            }
+            //console.log(_joinArea);
+            return _joinArea;
+        },
+        init:function(){
+            //绑定百度地图
+            var _this=_area.list();
+            console.log('_this='+_this);
+            //定义local
+            var local = new BMap.LocalSearch(map, {
+                renderOptions:{map: map,autoViewport: true}
+            });
+            local.setSearchCompleteCallback(function (searchResult) {
+                var poi = searchResult.getPoi(0);
+                //document.getElementById("result_").value = poi.point.lng + "," + poi.point.lat;
+                map.centerAndZoom(poi.point, 11);
+                gc.getLocation(poi.point, function(rs){
+                    showLocationInfo(poi.point, rs);
+                });
+            });
+            local.search(_this);
+        }
+    }
+
+    //搜索地址并赋值给form
+    $("#province,#city,#county").change(function(){
+        deletePoint();
+        _area.init();
+    });
+    //全局变量：存储address字符串长度做判断
+    var _thisLength='';
+    $("#address").keydown(function(){
+        _thisLength=$(this).val().length;
+        console.log('鼠标按下之前：'+_thisLength);
+    })
+    $("#address").keyup(function(){
+        var _newLength=$(this).val().length;
+        console.log('鼠标按下之后：'+_thisLength);
+        var timer=setTimeout(function(){
+            if(_thisLength<=_newLength){
+                deletePoint();
+                _area.init();
+            }
+            else{
+                clearTimeout(timer);
+            }
+        },3000);
+    })
+    $("#address").blur(function(){
+        deletePoint();
+        _area.init();
+    })
+    //_area.init();
+</script>
+</body>
+</html>
