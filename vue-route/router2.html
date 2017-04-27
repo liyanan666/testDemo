@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="vue/dist/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="vue-router/dist/vue-router.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="box">
+			<ul>
+				<li>
+					<a v-link="{path:'/home'}">首页</a>
+				</li>
+				<li>
+					<a v-link="{path:'/news'}">新闻</a>
+				</li>
+			</ul>
+			<div>
+				<router-view></router-view>
+			</div>
+		</div>
+		
+		<template id="shouye">
+			<h1>我是首页</h1>
+			<ul>
+				<li>
+					<a v-link="{path:'/home/login'}">登录</a>
+				</li>
+				<li>
+					<a v-link="{path:'/home/register'}">注册</a>
+				</li>
+			</ul>
+			<div>
+				<router-view></router-view>
+			</div>
+		</template>
+		<template id="xinwen">
+			<h1>我是新闻</h1>
+			<ul>
+				<li>
+					<a v-link="{path:'/news/news1/1'}">新闻001</a>
+				</li>
+				<li>
+					<a v-link="{path:'/news/news1/2'}">新闻002</a>
+				</li>
+			</ul>
+			<router-view></router-view>
+			
+		</template>
+		<template id="info">
+			{{$route.params | json}}
+			<br>
+			{{$route.path}}
+			<br>
+			{{$route.query | json}}
+		</template>
+		<script>
+			
+			//app创建模板  router关联模板
+			var App = Vue.extend();
+			
+			var Home = Vue.extend({
+				template:'#shouye'
+			});
+			var News = Vue.extend({
+				template:'#xinwen'
+			});
+			var Detail=Vue.extend({
+				template:'#info'
+			});
+			
+			var router = new VueRouter();
+			
+			router.map({
+				'home':{
+					component:Home,
+					subRoutes:{
+						'login':{
+							component:{
+								template:'<h3>我是登录<h3>'
+							}
+						},
+						'register':{
+							component:{
+								template:'<h3>我是注册<h3>'
+							}
+						}
+					}
+				},
+				'news':{
+					component:News,
+					subRoutes:{
+						'/news1/:id':{
+							component:Detail
+						}
+					}
+				}
+			});
+			
+			router.start(App,'#box');
+			
+			router.redirect({
+				'/':'/home'
+			});
+
+		</script>
+	</body>
+</html>
