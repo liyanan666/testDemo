@@ -9,6 +9,7 @@
 		   		uploadfile(This);
 		   	}); 
 		    function uploadfile(This){  //上传照片
+		    	console.log(This)
 		    	var file = This.files[0];  
 		        //alert("文件大小:"+(file.size / 1024).toFixed(1)+"kB");  
 		        if (window.FileReader) {  
