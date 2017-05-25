@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>3D-表白爱心</title>
+        <style>
+            body{
+                background: #000;
+            }
+            .heart3D{
+                width:100px;
+                height: 160px;
+                border-width:1px 1px 0 0;
+                border-radius: 50% 50% 50% /40% 50% 0%;/*弧形比例*/
+                position:absolute;
+                top:0;
+                right:0;
+                bottom:0;
+                left:0;
+                margin:auto;
+                transform-style: preserve-3d;
+                transform-origin: center center center;
+                animation: myFirst 15s linear infinite;
+            }
+            .heart3D div{
+                width:100px;
+                height: 160px;
+                border:1px solid red;
+                border-width:1px 1px 0 0;
+                border-radius: 50% 50% 50% /40% 50% 0%;/*弧形比例*/
+                position: absolute;
+            }
+            @keyframes myFirst{
+                0%{transform: rotateY(0deg);}
+                100%{transform: rotateY(360deg);}
+            }
+        </style>
+    </head>
+    <body>
+        <div class="heart3D">
+            <!--用下面的JS创建多个心形弧线-->
+        <!-- <div style="rotateY(10deg) rotateZ(45deg) translateX(30px)"></div> -->
+        </div>
+        <script>
+            var oHreat = document.getElementsByClassName("heart3D")[0];
+            for(var i=0;i<36;i++){
+                var oDiv = document.createElement("div");
+                oDiv.style.transform = "rotateY("+i*10+"deg) rotateZ(45deg) translateX(30px)";
+                oDiv.style.borderColor = color();
+                oHreat.appendChild(oDiv);
+            }
+            function color(){
+                //随机颜色
+                var _color = Math.ceil(Math.random()*16777215).toString(16);
+                while(_color.length<6){
+                    _color = "0"+_color;
+                }
+                return "#"+_color;
+            }
+        </script>
+    </body>
+</html>

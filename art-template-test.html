@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="art-template.js" type="text/javascript" charset="utf-8"></script>
+	
+	</head>
+	<body>
+		{{if user}}
+		  <h2>{{user.name}}</h2>
+		{{/if}}
+		<script type="text/javascript">
+			import template from 'art-template'
+			var html = template(__dirname + '/tpl-user.art', {
+			    user: {
+			        name: 'aui'
+			    }
+			});
+		</script>
+	</body>
+</html>
