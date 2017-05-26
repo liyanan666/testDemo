@@ -137,11 +137,11 @@
 							images.localId = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
 							len = images.localId.length;//返回本地Id列表的长度
 							uploadimage(images.localId);//上传图片到服务器
-							$(".pic").append("<img src=''+images.localId+''/>")
+							$(".pic").append("<img src="+images.localId+"/>")
 						}
 					})
 				});
-				var uploadimage = function(localIds) {
+				var uploadimage	 = function(localIds) {
 					var localId = localIds.shift();//每次选取ID列表的第一个上传
 					wx.uploadImage({
 						localId: localId, // 需要上传的图片的本地ID，由chooseImage接口获得
