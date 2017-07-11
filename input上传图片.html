@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				$("#oImg1").change(function(){
+				alert(1);
+			 	var This = this;
+		   		uploadfile(This);
+		   	}); 
+		    function uploadfile(This){  //上传照片
+		    	console.log(This)
+		    	var file = This.files[0];  
+		        //alert("文件大小:"+(file.size / 1024).toFixed(1)+"kB");  
+		        if (window.FileReader) {  
+		            var reader = new FileReader();  
+		            reader.readAsDataURL(file);  
+		            //监听文件读取结束后事件  
+		            reader.onloadend = function (e) {
+		            	console.log(e);
+//		            	This.parentNode.style.background="url("+e.target.result+") no-repeat";  //设置a标签
+//		            	This.parentNode.style.backgroundSize="cover";
+		            	//console.log(e.target.result)
+		            	var formData = new FormData();
+						formData.append('file',file);
+		            	console.log(formData)
+						$.ajax({ 
+							url :"http://test.yanfumall.com/jdj-wx/wxweb/upload.do" , 
+							type : 'POST', 
+							data : formData,
+							// 告诉jQuery不要去处理发送的数据
+							processData : false, 
+							// 告诉jQuery不要去设置Content-Type请求头
+							contentType : false,
+							success : function(data) { 
+								This.parentNode.style.background="url(http://test.yanfumall.com/jdj-wx"+data+") no-repeat";  //设置a标签
+		            			This.parentNode.style.backgroundSize="cover";
+							}, 
+							error : function(responseStr) { 
+								console.log("error");
+							} 
+						});
+		            };  
+		        }  
+		    }
+			})
+		</script>
+	</head>
+	<body>
+		<input type="file" name="oImg1" id="oImg1" value="" />
+	</body>
+</html>

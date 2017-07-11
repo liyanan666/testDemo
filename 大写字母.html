@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			window.onload =function(){
+				var newdata = "20120305";
+				var host = window.location.host;
+				console.log(host);
+				newdata=newdata.substring(0,4)+"-"+newdata.substring(4,6)+"-"+newdata.substring(6,8);
+				alert(newdata);
+//				var data = document.getElementById("datas");
+//				data.setAttribute("value",dataed);
+			}
+		</script>
+	</head>
+	<body>
+		<input type="date" name="data" id="datas" value="" />
+	</body>
+</html>

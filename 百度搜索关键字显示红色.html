@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<body>
+		
+		<input type="text" value="" id="keyWord"><a href="javascript:;" class="search">搜索</a>
+    <div class="text">
+        就是我在搜索框里面就是个关键字然后点击搜索然后它会出现对应的标题内容标题内容这样的，可是下去然后我需要，如果说我这个关键字的标题或者内容中有出现我就把它显示出来，但是我就是要做关键字然后在标题或者说内容这里，如果说出现了这个，关键是就把这关键字标红；
+    </div>
+    <script>
+        var str = $('.text').html();
+        $('.search').click(function(){
+            var keywords = $('#keyWord').val();
+            var reg = new RegExp(""+keywords+"","g");
+            var result = str.replace(reg,"<font style='color:#F00;font-weight:700;'>"+keywords+"</font>");
+            $('.text').html(result);
+        })
+    </script>
+	</body>
+</html>
