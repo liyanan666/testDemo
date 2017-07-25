@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="time">
+			<p class="time0"></p>
+			<p class="time1"></p>
+			<p class="time2"></p>
+		</div>
+		<script type="text/javascript">
+			$(function(){
+//				2017-07-19 23:25:06.0
+//				console.log(datatime1[0][0],datatime1[0][1],datatime1[0][2],datatime1[0][3],datatime1[0][4],datatime1[0][5]);
+				for(var i = 0 ;i<3;i++){
+					var datatime1 = [[2017,07,19,23,25,06],[2017,07,20,11,40,00],[2017,07,20,12,40,00]];
+					(function(a){
+						setInterval(function(){
+							ShowCountDown(datatime1[a][0],datatime1[a][1],datatime1[a][2],datatime1[a][3],datatime1[a][4],datatime1[a][5],'time'+a+'');
+						},a*1000);
+					})(i);
+				}
+				
+				function ShowCountDown(year,month,day,hours,min,ss,divname) 
+				{ 
+					var obj = $("."+divname);
+					var now = new Date();
+					var endDate = new Date(year, month-1, day,hours,min,ss);
+					var leftTime=endDate.getTime()-now.getTime(); 
+					var leftsecond = parseInt(leftTime/1000); 
+					var day1=Math.floor(leftsecond/(60*60*24)); 
+					var hour=Math.floor((leftsecond-day1*24*60*60)/3600); 
+					var minute=Math.floor((leftsecond-day1*24*60*60-hour*3600)/60); 
+					var second=Math.floor(leftsecond-day1*24*60*60-hour*3600-minute*60); 
+					
+					obj.html("倒计时 "+hour+"小时"+minute+"分"+second+"秒");
+					
+					
+				} 
+			})	
+		</script>
+	</body>
+</html>
