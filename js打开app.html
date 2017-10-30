@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var APPCommon = {
+			    iphoneSchema: 'XingboTV://',    //appid 问后端要
+			    iphoneDownUrl: 'https://itunes.apple.com/cn/app/xing-botv-mei-nu-shuai-ge3d/id1098066581?l=en&mt=8',  //下载app地址
+			    androidSchema: 'scheme://com.xingbo/', //appid 问后端要
+			    androidDownUrl: 'http://webrs.xingbo.tv/app/XingboLive-release.apk', //下载app地址
+			    openApp: function(){
+			        var this_  =  this;
+			        //微信
+			        if(this_.isWeixin()){  //判断是不是在微信，如果在微信提示在浏览器打开
+			            $(".weixin-tip").css("height",$(window).height());
+			            $(".weixin-tip").show();
+			            $('.weixin-tip').on('touchstart', function () {
+			                $(".weixin-tip").hide();
+			            });
+			 
+			        }else{//非微信浏览器
+			            if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {  //如果是苹果手机
+			                var loadDateTime = new Date();
+			                window.setTimeout(function() {
+			                    var timeOutDateTime = new Date();
+			                    if (timeOutDateTime - loadDateTime < 5000) {
+			                        window.location = this_.iphoneDownUrl;//ios下载地址
+			                    } else {
+			                        window.close();
+			                    }
+			                },25);
+			                window.location = this.iphoneSchema;
+			            }else if (navigator.userAgent.match(/android/i)) {//如果是安卓手机
+			                try {
+			                    window.location = this_.androidSchema;
+			                    setTimeout(function(){
+			                        window.location=this_.androidDownUrl; //android下载地址
+			 
+			                    },500);
+			                } catch(e) {}
+			            }
+			        }
+			    },
+			    isWeixin: function(){ //判断是否是微信
+			        var ua = navigator.userAgent.toLowerCase();
+			        if (ua.match(/MicroMessenger/i) == "micromessenger") {
+			            return true;
+			        } else {
+			            return false;
+			        }
+			    }
+			 
+			};
+		</script>
+	</body>
+</html>
