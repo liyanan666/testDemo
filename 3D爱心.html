@@ -42,6 +42,9 @@
         <!-- <div style="rotateY(10deg) rotateZ(45deg) translateX(30px)"></div> -->
         </div>
         <script>
+        	var a = { n : 1};
+        	a.x = a = { n : 2};
+        	console.log(a.x);
             var oHreat = document.getElementsByClassName("heart3D")[0];
             for(var i=0;i<36;i++){
                 var oDiv = document.createElement("div");
