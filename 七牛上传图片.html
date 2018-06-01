@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<script src="https://unpkg.com/qiniu-js@2.2.2/dist/qiniu.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<input type="file" accept="image/*" name="" id="pic" value="" />
+		
+		<div id="upload">上传图片</div>
+		<script type="text/javascript">
+			$(function(){
+				var token,domain
+				$.ajax({
+					type:"post",
+					url:"http://127.0.0.1:3000/api/qiniutoken",
+					async:true, 
+					// 告诉jQuery不要去处理发送的数据
+					processData : false, 
+					// 告诉jQuery不要去设置Content-Type请求头
+					contentType : false,
+					success:function(data){
+						token = data.token;
+						domain = data.domain;
+					}
+				});
+				
+				$("#pic").change(function(){
+					
+//					UploadFile(event,token,domain,'z2')
+					
+					var file = this.files[0]; 
+					var key = Date.parse(new Date()) + "_" + Math.round(Math.random() * 100);
+					var putExtra = {};
+					
+					var config = {
+						useCdnDomain: true,
+						
+					};
+					var observable = qiniu.upload(file, key, token, putExtra, config)
+					
+					var observer = {
+				      next(res){
+				        // ...
+				      },
+				      error(err){
+				        // ...
+				      }, 
+				      complete(res){
+				        // ...
+				      }
+				    }
+					var fopArr = [];
+					fopArr.push({
+						fop: 'imageView2', // 指定imageView2操作
+						mode: 0, // 此参数同imageView2函数的参数，下同
+						h: 500,
+						q: 50
+					});
+					let imgLink = qiniu.pipeline(fopArr, key, domain);
+					console.log(imgLink);
+					var subscription = observable.subscribe(observer) // 上传开始	
+					console.log(subscription)
+//					
+//					var formData = new FormData();
+//					formData.append('file',file);
+					
+					
+				})
+				
+				var UploadFile=function(event, token, domain, the_region) {
+
+					let key, this_vm = this,
+					file_target = event.target,
+					file = file_target.files[0];
+	
+					
+	
+					let putExtra = {};
+					let config = {
+						useCdnDomain: true,
+						region: qiniu.region.z2
+					};
+					let observable = qiniu.upload(file, key, token, putExtra, config);
+					let fopArr = [];
+					fopArr.push({
+						fop: 'imageView2', // 指定imageView2操作
+						mode: 0, // 此参数同imageView2函数的参数，下同
+						h: 500,
+						q: 50
+					});
+					let imgLink = qiniu.pipeline(fopArr, key, domain);
+					console.log(imgLink)
+				}
+			})
+		</script>
+	</body>
+</html>
