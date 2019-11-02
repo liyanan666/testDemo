@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<pre>
+    parent > child
+    在给定的父元素下匹配所有的子元素
+</pre>
+
+<div class="help">
+    <span class="bnt">我是弹出层</span>
+    <ul id="list" class="foo">
+        <li><a href="#">第1条记录</a></li>
+        <li><a href="#">第2条记录</a></li>
+        <li><a href="#">第3条记录</a></li>
+        <li><a href="#">第4条记录</a></li>
+    </ul>
+</div>
+
+<style>
+    .bnt{
+        width: 100px;height: 50px;background: #777;color: #fff;
+        display: block;
+        text-align: center;
+        line-height: 50px;
+        cursor: default;
+    }
+    .help ul{
+        display: none;
+        border: 1px solid #aaa;
+    }
+    a{display: block;padding: 10px;}
+</style>
+
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script>
+
+    (function ($) {
+        $('.bnt').click(function(){
+            if($(this).hasClass('show')){
+                $('.help ul').hide();
+                $(this).removeClass('show')
+                return ;
+            }
+
+            $('.help ul').show();
+            $(this).addClass('show')
+
+        })
+
+        document.addEventListener('click',function (e) {
+            var parent=$(e.target).parents('.foo,.help');
+
+            if(parent.length===0){
+                console.log('不在弹层与按钮区')
+                //操作此区域
+
+                $('.help ul').hide();
+                $('.bnt').removeClass('show');
+
+            }else{
+                console.log('按钮与弹层区')
+            }
+        })
+    })(jQuery);
+</script>
+</body>
+</html>

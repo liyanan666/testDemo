@@ -1,0 +1,165 @@
+
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>圆形旋转导航菜单</title>
+		<style>
+			html,body{padding: 0;margin: 0;}
+		</style>
+		<script src="https://qiniucdn.immatchu.com/plugin/jquery/jquery.min.js"></script>
+    	<script src="https://qiniucdn.immatchu.com/plugin/jquery/jquery.rotate.js"></script>
+	</head>
+	<body>
+		<!-- 代码部分begin -->
+		<!--
+			圆形菜单[最多容纳8个最大正方形菜单块, 若需容纳更多的菜单块,则需要缩小菜单块的大小]
+			半径 oR = 150px;
+			圆心坐标(150,150)
+		-->
+		<div id="outerDiv" style="background-color: #F3F0F0;width:300px;height:300px;border-radius:150px;position: absolute;background: url(images/1.jpg);">
+
+	
+		</div>
+		<script type="text/javascript">
+			
+
+			var preX,preY;//上一次鼠标点的坐标
+			var curX,curY;//本次鼠标点的坐标
+			var preAngle;//上一次鼠标点与圆心(150,150)的X轴形成的角度(弧度单位)
+			var transferAngle;//当前鼠标点与上一次preAngle之间变化的角度
+
+			var a = 0;
+
+			
+
+			//点击事件
+			$("#outerDiv").mousedown(function(event){
+				preX = event.clientX;
+				preY = event.clientY;
+				//计算当前点击的点与圆心(150,150)的X轴的夹角(弧度) --> 上半圆为负(0 ~ -180), 下半圆未正[0 ~ 180]
+				preAngle = Math.atan2(preY - 150, preX - 150);
+				//移动事件
+				$("html").mousemove(function(event){
+					curX = event.clientX;
+					curY = event.clientY;
+					//计算当前点击的点与圆心(150,150)的X轴的夹角(弧度) --> 上半圆为负(0 ~ -180), 下半圆未正[0 ~ 180]
+					var curAngle = Math.atan2(curY - 150, curX - 150);
+					transferAngle = curAngle - preAngle;
+					a += (transferAngle * 180 / Math.PI);
+					$('#outerDiv').rotate(a);
+
+			
+					preX = curX;
+					preY = curY;
+					preAngle = curAngle;
+				});
+				//释放事件
+				$("html").mouseup(function(event){
+					$("html").unbind("mousemove");
+				});
+			});
+			
+			
+			var Tween = {
+	  Quad: {
+	    // t: current time（当前时间）；
+	    // b: beginning value（初始值）；
+	    // c: change in value（变化量）；
+	    // d: duration（持续时间）。
+	    easeOut: function (t, b, c, d) {
+	      return -c * (t /= d) * (t - 2) + b
+	    }
+	  }
+	}
+	
+	;(function ($) {
+	  $.fn.RotateH = function (options) {
+	    var defaults = {
+	        trigger: document, // 拖动按钮 默认 整个文档
+	        centerX: 0, // 圆心点x 默认 对象中心x
+	        centerY: 0, // 圆心点y 默认 对象中心y
+	        inertia: true, // 惯性旋转 开发中
+	        debug: false
+	      },
+	      _this = this
+	    var ops = $.extend(defaults, options)
+	
+	    // 可调整动画函数
+	    var offset = 30 // 缓冲距离，越大越快
+	    var interval = 5 // 动画速度，越大越慢
+	    var duration = 100 // 缓冲步数，越大越慢
+	
+	    var cur = 0
+	    var flag = 1
+	    var curTime = 0
+	
+	    // 初始化
+	    function Init () {
+	      // 初始化圆心点
+	      if (ops.centerX == 0 && ops.centerY == 0) {
+	        ops.centerX = _this.offset().left + _this.width() / 2
+	        ops.centerY = _this.offset().top + _this.height() / 2
+	      }
+	      $(ops.trigger).bind('mousedown', function () {
+	        $(document).bind('mousemove', movehandle)
+	      })
+	      $(document).mouseup(function (event) {
+	        event = event || window.event
+	        var dis = angle(ops.centerX, ops.centerY, event.clientX, event.clientY)
+	
+	        if (dis !== cur)
+	          return
+	
+	        $(document).unbind('mousemove')
+	        
+	        document.onmousemove = document.onmouseup = null;
+	        if (ops.inertia) inertiaShow(dis)
+	      })
+	    }
+	    // 鼠标移动时处理事件
+	    function movehandle (event) {
+	      event = event || window.event
+	      var dis = angle(ops.centerX, ops.centerY, event.clientX, event.clientY)
+	
+	      if (dis - cur > 0)
+	        flag = 1
+	      else
+	        flag = 0
+	
+	      if (ops.debug)
+	        console.log(ops.centerX + '-' + ops.centerY + '|' + event.clientX + '-' + event.clientY + ' ' + dis)
+	
+	      cur = dis
+	
+	      rotate(dis)
+	    }
+	    // 计算两点的线在页面中的角度
+	    function angle (centerx, centery, endx, endy) {
+	      var diff_x = endx - centerx,
+	        diff_y = endy - centery
+	
+	      var c = 360 * Math.atan2(diff_y, diff_x) / (2 * Math.PI)
+	      c = c <= -90 ? (360 + c) : c
+	      return c + 90
+	    }
+	    // 惯性旋转
+	    function inertiaShow (angle) {
+	      
+	    }
+	    // 设置角度
+	    function rotate (angle, step) {
+	      $(_this).css('transform', 'rotate(' + angle + 'deg)')
+	    }
+	    Init()
+	  }
+	})(jQuery)
+	$('#div1').RotateH({
+		  trigger: $('#div1'),
+		  debug: false
+		})
+		</script>
+		<!-- 代码部分end -->
+	</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <video id="video" src=""></video>
+    <canvas id="canvas" width="" height=""></canvas>
+    <span id="snap">开始</span>
+    <script type="text/javascript">
+    	window.addEventListener("DOMContentLoaded", function() {
+		    var canvas = document.getElementById("canvas"),
+		    context = canvas.getContext("2d"),
+		    video = document.getElementById("video"),
+		    videoObj = { "video": true },
+		    errBack = function(error) {
+		        console.log("Video capture error: ", error.code);
+		    };
+		    if(navigator.getUserMedia) { // Standarda
+		        navigator.getUserMedia(videoObj, function(stream) {
+		            video.src = stream;
+		            video.play();
+		        }, errBack);
+		    } else if(navigator.webkitGetUserMedia) { // WebKit-prefixed
+		        navigator.webkitGetUserMedia(videoObj, function(stream){
+		        video.src = window.webkitURL.createObjectURL(stream);
+		        video.play();
+		    }, errBack);
+		    }
+		    else if(navigator.mozGetUserMedia) { // Firefox-prefixed
+		        navigator.mozGetUserMedia(videoObj, function(stream){
+		            video.src = window.URL.createObjectURL(stream);
+		            video.play();
+		        }, errBack);
+		    }
+		    document.getElementById("snap").addEventListener("click", function() {
+		        context.drawImage(video, 0, 0, 640, 480);
+		    });
+		}, false);
+    	
+    	
+    	
+//    var opt = {
+//      audio: true,
+//      video: {
+//        width: 375,
+//        height: 603
+//      }
+//    };
+//    navigator.mediaDevices.getUserMedia(opt)
+//      .then(function(mediaStream) {
+//        var video = document.querySelector('video');
+//        video.srcObject = mediaStream;
+//        video.onloadedmetadata = function(e) {
+//          video.play();
+//        };
+//      })
+//      .catch(function(err) {
+//        console.log(err.name + ": " + err.message);
+//      });
+    </script>
+  </body>
+</html>

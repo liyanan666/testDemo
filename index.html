@@ -1,10 +1,74 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="utf-8" />
-		<title></title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>MatchU轻定制</title>
+		<link rel="stylesheet" type="text/css" href="https://qiniucdn.immatchu.com/plugin/swiper/swiper-4.3.3.min.css"/>
+		<script src="https://qiniucdn.immatchu.com/plugin/swiper/swiper-4.3.3.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<script src="https://qiniucdn.immatchu.com/plugin/vue/vue.min.js"></script>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<style type="text/css">
+			.li{
+				width: 80%;
+				height: 300px;
+				background: #0000FF;
+				margin: 0 auto;
+			}
+		</style>
 	</head>
 	<body>
-		
+		<div class="main" id="app">
+			<img class="backimg" :src="bgImg"/>
+			
+			<div style="width: 80%;margin: 0 auto;">
+				<div class="swiper-container">
+				  <div class="swiper-wrapper">
+				    <div class="swiper-slide">
+				    	<div class="li">
+				    		
+				    	</div>
+				    </div>
+				    <div class="swiper-slide">
+				    	<div class="li">
+				    		
+				    	</div>
+				    </div>
+				    <div class="swiper-slide">
+				    	<div class="li">
+				    		
+				    	</div>
+				    </div>
+				    
+				  </div>
+				</div>
+			</div>
+			
+			<!--<ul class="content clearfix" id="banner">
+				
+			    <li class="list fl" v-for="item in mock">
+			    	<div class="bannerImg">
+			    		<img class="newperson" src="https://qiniucdn.immatchu.com/mulp/image/webapp/newperson.png"/>
+			    		<img :src="item.banner"/>
+			    	</div>
+			    	<p class="title" v-text="item.name"></p>
+			    	<p class="price"><span class="red">¥199</span><span class="gray">¥399<em></em></span></p>
+			    	<p class="line"></p>
+			    	<p class="info" v-text="item.info"></p>
+			    	<div class="ml">
+			    		<img v-for="items in item.ml" :src="items"/>
+			    	</div>
+			    </li>
+			   
+			</ul>-->
+		</div>
+		<script type="text/javascript">
+			var mySwiper = new Swiper('.swiper-container', {
+				autoplay: false,//可选选项，自动滑动
+			})
+			
+			
+		</script>
 	</body>
 </html>

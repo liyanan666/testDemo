@@ -1,0 +1,100 @@
+body, div, dl, dt, dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote，th,td{margin:0;padding:0;letter-spacing: 0}
+table{border-collapse:collapse;border-spacing:0;}
+fieldset,img {border:0;}
+li{list-style: none;}
+body {margin:0 auto;font-family: "微软雅黑", "宋体", Arial, Helvetica, sans-serif;padding:0px;min-width:300px;max-width:640px;}
+a{text-decoration: none;}
+.clearfix {zoom: 1;}
+.clearfix:after {content: ".";width: 0;height: 0;visibility: hidden;display: block;clear: both;overflow:hidden;}
+.fl {float: left}
+.fr {float: right}
+
+.main{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	max-width: 640px;
+}
+.main .backimg{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.main .content{
+    margin-top: 35%;
+    width: 220%;
+    position: absolute;
+}
+
+.list{
+	width: 31%;
+    margin: 0 10px;
+    height: 100%;
+    background: #fff;
+    border-radius: 5px;
+}
+.list .bannerImg{
+	width: 86%;
+	margin: 7%;
+	position: relative;
+}
+.bannerImg .newperson{
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 60px;
+}
+.bannerImg img{
+	width: 100%;
+}
+.list .title{
+	text-align: center;
+	font-size: 22px;
+	color: #000;
+}
+.list .price{
+	text-align: center;
+	margin-top: 16px;
+}
+.price .red{
+	color: red;
+	font-size: 20px;
+}
+.price .gray{
+	margin-left:5px ;
+	color: #a3a3a3;
+	position: relative;
+}
+.gray em{
+	display: inline-block;
+    width: 40px;
+    height: 1px;
+    background: #a3a3a3;
+    position: absolute;
+    top: 10px;
+    left: 0;
+}
+.list .line{
+	width: 50px;
+	height: 1px;
+	background: #000;
+	margin: 28px auto 0 auto;
+}
+.info{
+	text-align: center;
+	margin-top: 12px;
+	color: #5d5d5d;
+}
+.ml{
+	width: 140px;
+	margin: 10px auto 18px auto;
+	display: flex;
+	justify-content: space-around;
+}
+.ml img{
+	width: 20px;
+	height: 20px;
+}

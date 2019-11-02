@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.circle{
+				width: 500px;
+				height: 500px;
+				background: #00BFFF;
+				margin: 100px auto;
+				position: relative;
+			}
+			.c1{
+				width: 100px;
+				height: 250px;
+				position: absolute;
+				left: 50%;
+				margin-left: -50px;
+				top: 0;
+				background: #fff;
+				transform-origin: center 250px;
+			}
+			.c2{
+				position: absolute;
+				background: #000000;
+				width: 100px;
+				height: 100px;
+				border-radius: 15px;
+				top: 0;
+			}
+			.t2{
+				transform: rotate(60deg);
+			}
+			.t3{
+				transform: rotate(120deg);
+			}
+			.t4{
+				transform: rotate(180deg);
+			}
+			.t5{
+				transform: rotate(240deg);
+			}
+			.t6{
+				transform: rotate(300deg);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="circle">
+			<div class="c1 t1">
+				<div class="c2"></div>
+			</div>
+			<div class="c1 t2">
+				<div class="c2"></div>
+			</div>
+			<div class="c1 t3">
+				<div class="c2"></div>
+			</div>
+			<div class="c1 t4">
+				<div class="c2"></div>
+			</div>
+			<div class="c1 t5">
+				<div class="c2"></div>
+			</div>
+			<div class="c1 t6">
+				<div class="c2"></div>
+			</div>
+		</div>
+	</body>
+</html>
