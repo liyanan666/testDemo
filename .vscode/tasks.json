@@ -4,9 +4,14 @@
         "label": "build hello world",
         "type": "shell",
         "command": "g++",
-        "args": ["-g", "-o", "testDemo", "hello.cpp"],
+        "args": [
+            "-g",
+            "-o",
+            "testDemo",
+            "hello.cpp"
+        ],
         "group": {
-            "kind": "build",
+            "kind": "test",
             "isDefault": true
         }
     }]
